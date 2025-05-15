@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+rojo build -o "rojo-output.rbxl"
+lune run ./scripts/build.luau

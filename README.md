@@ -9,7 +9,7 @@ The build depends on:
 - [lune](https://github.com/lune-org/lune)
 
 ```bash
-./build
+./localbuild
 ```
 
 # General Guideline
