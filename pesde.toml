@@ -1,0 +1,18 @@
+name = "leanoob/genuinegame"
+version = "0.1.0"
+description = "a game"
+authors = ["leanop"]
+repository = "https://github.com/leanoob/genuinegame"
+license = "MIT"
+
+[target]
+environment = "roblox"
+
+[indices]
+default = "https://github.com/pesde-pkg/index"
+
+[wally_indices]
+default = "https://github.com/UpliftGames/wally-index"
+
+[dependencies]
+profilestore = { wally = "lm-loleris/profilestore", version = "^1.0.3" }

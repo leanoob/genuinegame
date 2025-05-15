@@ -1,0 +1,39 @@
+{
+  "name": "genuinegame",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "$path": "src/client",
+      "shared": {
+        "$path": "src/shared"
+      }
+    },
+
+    "ServerStorage": {
+      "$path": "src/server",
+      "Packages": {
+        "$path": "roblox_server_packages"
+      }
+    },
+
+    "Workspace": {
+      "$properties": {
+        "FilteringEnabled": true
+      }
+    },
+    "Lighting": {
+      "$properties": {
+        "Ambient": [
+          0,
+          0,
+          0
+        ],
+        "Brightness": 2,
+        "GlobalShadows": true,
+        "Outlines": false,
+        "Technology": "ShadowMap"
+      }
+    }
+  }
+}
