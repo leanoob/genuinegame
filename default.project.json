@@ -7,6 +7,9 @@
       "$path": "src/client",
       "shared": {
         "$path": "src/shared"
+      },
+      "Packages": {
+        "$path": "roblox_packages"
       }
     },
 

@@ -5,6 +5,14 @@ name = "leanoob/genuinegame"
 version = "0.1.0"
 target = "roblox"
 
+[graph."marked/jecs@0.6.0 roblox"]
+direct = ["jecs", { name = "marked/jecs", version = "^0.6.0", index = "default" }, "standard"]
+resolved_ty = "standard"
+
+[graph."marked/jecs@0.6.0 roblox".pkg_ref]
+ref_ty = "pesde"
+index_url = "https://github.com/pesde-pkg/index"
+
 [graph."wally#lm-loleris/profilestore@1.0.3 roblox_server"]
 direct = ["profilestore", { wally = "wally#lm-loleris/profilestore", version = "^1.0.3", index = "default" }, "standard"]
 resolved_ty = "standard"
