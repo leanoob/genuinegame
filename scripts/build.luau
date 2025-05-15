@@ -1,23 +1,23 @@
 local fs = require("@lune/fs")
 local roblox = require("@lune/roblox")
-local process = require("@lune/process")
-local stdio = require("@lune/stdio")
+-- local process = require("@lune/process")
+-- local stdio = require("@lune/stdio")
 
 local TargetServices = {
   "ReplicatedStorage",
   "ServerStorage"
 }
 
-local out = process.exec("rojo", {
-  "build",
-  "-o",
-  "rojo-output.rbxl"
-})
+-- local out = process.exec("rojo", {
+--   "build",
+--   "-o",
+--   "rojo-output.rbxl"
+-- })
 
-if not out.ok then
-  stdio.ewrite(out.stderr)
-  process.exit(1)
-end
+-- if not out.ok then
+--   stdio.ewrite(out.stderr)
+--   process.exit(1)
+-- end
 
 local placefile = fs.readFile("assets.rbxl")
 local game = roblox.deserializePlace(placefile)
