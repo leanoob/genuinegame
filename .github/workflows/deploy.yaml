@@ -12,6 +12,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Pesde
+        uses: lumin-org/setup-pesde@v0.4.1
+
+      - name: Build
+        run: ./build
+      
       - name: Publish to Roblox
         uses: filiptibell/roblox-place-publish-action@v2.1
         with:
