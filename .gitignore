@@ -5,6 +5,8 @@
 /*.rbxlx.lock
 /*.rbxl.lock
 
+/output.rbxl
+
 # sourcemap
 /sourcemap.json
 
