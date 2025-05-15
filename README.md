@@ -17,3 +17,4 @@ The build depends on:
 - PRs should not be for the purpose of destroying things added by other people 
 - Try to keep your code isolated (server/yourname, client/yourname)
 - Won't accept anything that breaks roblox tos
+- Do not modify assets.rbxl
