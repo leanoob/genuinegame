@@ -1,6 +1,6 @@
 # genuinegame
 
-I will attempt to make a game
+we will make a game
 
 ## Build
 The build depends on:
@@ -11,3 +11,9 @@ The build depends on:
 ```bash
 ./build
 ```
+
+# General Guideline
+- Will merge almost any PR, merges are automatically published to the game
+- PRs should not be for the purpose of destroying things added by other people 
+- Try to keep your code isolated (server/yourname, client/yourname)
+- Won't accept anything that breaks roblox tos
