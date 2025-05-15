@@ -25,14 +25,16 @@
     "Lighting": {
       "$properties": {
         "Ambient": [
-          0,
-          0,
-          0
+          0.275,
+          0.275,
+          0.275
         ],
-        "Brightness": 2,
+        "Brightness": 3,
         "GlobalShadows": true,
         "Outlines": false,
-        "Technology": "ShadowMap"
+        "Technology": "ShadowMap",
+        "EnvironmentDiffuseScale": 1,
+        "EnvironmentSpecularScale": 1
       }
     }
   }
