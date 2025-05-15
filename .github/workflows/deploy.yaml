@@ -1,0 +1,22 @@
+name: deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Publish to Roblox
+        uses: filiptibell/roblox-place-publish-action@v2.1
+        with:
+          universe-id: '7708271874'
+          place-id: '100717556333221'
+          api-key: ${{ secrets.CLOUD_API_KEY }}
+          path: 'output.rbxl'
+          max-retries: '1'
