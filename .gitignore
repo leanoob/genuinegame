@@ -8,5 +8,8 @@
 /*.rbxlx.lock
 /*.rbxl.lock
 
+# sourcemap
+/sourcemap.json
+
 # syncthing
 /.stfolder
