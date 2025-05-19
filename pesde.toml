@@ -17,3 +17,4 @@ default = "https://github.com/UpliftGames/wally-index"
 [dependencies]
 profilestore = { wally = "lm-loleris/profilestore", version = "^1.0.3" }
 jecs = { name = "marked/jecs", version = "^0.6.0" }
+vide = { repo = "https://github.com/alicesaidhi/vide", rev = "main" }
