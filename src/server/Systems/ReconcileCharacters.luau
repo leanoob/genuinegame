@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
 
 local SetCharacterRemote = ReplicatedStorage.RemoteEvents.SetCharacter :: RemoteEvent
+local Mobs = require(ServerStorage.Singletons.Mobs)
 
 local jecs = require(ReplicatedStorage.Packages.jecs)
 local World = require(ServerStorage.Singletons.World)
@@ -107,6 +108,17 @@ local function ChangeOrAdd(ID, _, Player)
 			ModelComponent,
 			CharacterModel
 		)
+		Mobs[CharacterModel] = NewMob
+
+		local WorkspaceCheck: RBXScriptConnection
+		WorkspaceCheck = CharacterModel.AncestryChanged:Connect(function()
+			if not CharacterModel:IsDescendantOf(workspace) then
+				Mobs[CharacterModel] = nil
+				if WorkspaceCheck then
+					WorkspaceCheck:Disconnect()
+				end
+			end
+		end)
 
 		World:add(
 			ID,
