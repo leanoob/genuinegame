@@ -6,13 +6,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local jecs = require(ReplicatedStorage.Packages.jecs)
 local World = require(ServerStorage.Singletons.World)
 
-local Map = {}
+local RegisteredHooks = {}
 
 function module.GetCallback(Hook: jecs.Entity<any>, Component: jecs.Entity<unknown>, Callback)
-	local HookedComponents = Map[Hook]
+	local HookedComponents = RegisteredHooks[Hook]
 	if not HookedComponents then
 		HookedComponents = {}
-		Map[Hook] = HookedComponents
+		RegisteredHooks[Hook] = HookedComponents
 	end
 
 	local ComponentHookCallbacks = HookedComponents[Component]
@@ -23,8 +23,8 @@ function module.GetCallback(Hook: jecs.Entity<any>, Component: jecs.Entity<unkno
 			Component,
 			Hook,
 			function(...)
-				for Callback,_ in next, ComponentHookCallbacks do
-					Callback(...)
+				for CallbackFunc,_ in next, ComponentHookCallbacks do
+					CallbackFunc(...)
 				end
 			end
 		)
@@ -34,10 +34,10 @@ function module.GetCallback(Hook: jecs.Entity<any>, Component: jecs.Entity<unkno
 end
 
 function module.ReleaseCallback(Hook: jecs.Entity<any>, Component: jecs.Entity<unknown>, Callback)
-	local HookedComponents = Map[Hook]
-	assert(HookedComponents)
+	local HookedComponents = RegisteredHooks[Hook]
+	if not HookedComponents then return end
 	local ComponentHookCallbacks = HookedComponents[Component]
-	assert(ComponentHookCallbacks)
+	if not ComponentHookCallbacks then return end
 
 	ComponentHookCallbacks[Callback] = nil
 end
