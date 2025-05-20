@@ -12,9 +12,9 @@ This project includes third-party libraries, each licensed under their respectiv
   See: `LICENSES/Ukendio.jecs.txt`  
   Source: https://github.com/Ukendio/jecs
 
-- **vide** by centau 
-  Licensed under the MIT License 
-  See: `LICENSES/centau.vide.txt` 
+- **vide** by centau
+  Licensed under the MIT License
+  See: `LICENSES/centau.vide.txt`
   Source: https://github.com/centau/vide 
 
 See each license file in the `LICENSES/` folder for full terms.
