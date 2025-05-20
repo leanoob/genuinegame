@@ -1,15 +1,24 @@
-local PlayerService = game:GetService("Players")
+local ServerStorage = game:GetService("ServerStorage")
 
-PlayerService.PlayerAdded:Connect(function(Player)
-  Player.CharacterAdded:Connect(function(Model)
-    local Humanoid = Model:WaitForChild("Humanoid")
-    Humanoid.Died:Connect(function()
-      Player:LoadCharacter()
-    end)
-  end)
-  
-  Player:WaitForChild("Backpack") -- Backpack is added when player has loaded
-  if not Player.Parent then return end
+local RunOrder = require(ServerStorage.Singletons.RunOrder)
+local PhaseOrder = RunOrder.PhaseOrder
+local Phases = RunOrder.Phases
 
-  Player:LoadCharacter()
+for i = 1,#PhaseOrder do -- Remove no-ops
+    local Systems = Phases[PhaseOrder[i]]
+
+    for i2 = #Systems,1,-1 do
+    	if Systems[i2] == false then
+    		table.remove(Systems, i2)
+    	end
+    end
+end
+
+game:GetService("RunService").Heartbeat:Connect(function(DeltaTime)
+    for i = 1,#PhaseOrder do
+        local Systems = Phases[PhaseOrder[i]]
+        for i2 = 1,#Systems do
+            Systems[i2](DeltaTime)
+        end
+    end
 end)
