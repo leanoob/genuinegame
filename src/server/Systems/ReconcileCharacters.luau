@@ -120,7 +120,11 @@ local function ChangeOrAdd(ID, _, Player)
 		return
 	else
 		local CharacterModel = World:get(CharacterEntity, ModelComponent)
-		if not CharacterModel.Parent then
+		if (not CharacterModel.Parent) or (not CharacterModel:FindFirstChildOfClass("Humanoid")) or (CharacterModel:FindFirstChildOfClass("Humanoid").Health <= 0) then
+			if CharacterModel.Parent then
+				CharacterModel:Destroy()
+			end
+			
 			CharacterModel = MakeCharacterFromPlayer(Player)
 			if not CharacterModel then
 				return
