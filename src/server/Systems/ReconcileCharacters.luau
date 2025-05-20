@@ -4,7 +4,6 @@ local PlayerService = game:GetService("Players")
 local Utils = ServerStorage.Util
 
 local SetCharacterRemote = ReplicatedStorage.RemoteEvents.SetCharacter :: RemoteEvent
-local Mobs = require(ServerStorage.Singletons.Mobs)
 
 local jecs = require(ReplicatedStorage.Packages.jecs)
 local World = require(ServerStorage.Singletons.World)
@@ -14,6 +13,8 @@ local Hooks = require(Utils.HookCallback)
 local PlayerComponent = require(Components.Player)
 local ModelComponent = require(Components.Model)
 local PlayerCharacterRelation = require(Components.PlayerCharacter)
+
+local MobPrefab = require(ServerStorage.Prefabs.Mob)
 
 local function GivePlayerModelOwnership(Player: Player, Model: Model)
 	for _, Object in next, Model:GetDescendants() do
@@ -104,23 +105,7 @@ local function ChangeOrAdd(ID, _, Player)
 			return
 		end
 
-		local NewMob = World:entity()
-		World:set(
-			NewMob,
-			ModelComponent,
-			CharacterModel
-		)
-		Mobs[CharacterModel] = NewMob
-
-		local WorkspaceCheck: RBXScriptConnection
-		WorkspaceCheck = CharacterModel.AncestryChanged:Connect(function()
-			if not CharacterModel:IsDescendantOf(workspace) then
-				Mobs[CharacterModel] = nil
-				if WorkspaceCheck then
-					WorkspaceCheck:Disconnect()
-				end
-			end
-		end)
+		local NewMob = MobPrefab(CharacterModel)
 
 		World:add(
 			ID,

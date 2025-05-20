@@ -9,10 +9,11 @@ return {
     },
     Phases = {
         Init = {
-            require(Systems.ReconcileCharacters)
+            require(Systems.ReconcileCharacters),
+            require(Systems.ReconcilePlayers)
         },
         Reconcile = {
-            require(Systems.ReconcilePlayers)           
+
         }
     }
 }
