@@ -37,6 +37,7 @@ local function MakeCharacterFromPlayer(Player: Player): Model?
 end
 
 local function ChangeOrAdd(ID, _, Player)
+	Player:WaitForChild("Backpack")
 	local CharacterEntity = World:target(ID, PlayerCharacterRelation)
 	if not CharacterEntity then
 		local CharacterModel = MakeCharacterFromPlayer(Player)
