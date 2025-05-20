@@ -31,6 +31,8 @@ function module.GetCallback(Hook: jecs.Entity<any>, Component: jecs.Entity<unkno
 	end
 
 	ComponentHookCallbacks[Callback] = true
+
+	return Callback
 end
 
 function module.ReleaseCallback(Hook: jecs.Entity<any>, Component: jecs.Entity<unknown>, Callback)
@@ -41,3 +43,5 @@ function module.ReleaseCallback(Hook: jecs.Entity<any>, Component: jecs.Entity<u
 
 	ComponentHookCallbacks[Callback] = nil
 end
+
+return module

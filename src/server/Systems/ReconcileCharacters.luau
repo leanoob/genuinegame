@@ -1,6 +1,7 @@
 local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local PlayerService = game:GetService("Players")
+local Utils = ServerStorage.Util
 
 local SetCharacterRemote = ReplicatedStorage.RemoteEvents.SetCharacter :: RemoteEvent
 local Mobs = require(ServerStorage.Singletons.Mobs)
@@ -8,6 +9,7 @@ local Mobs = require(ServerStorage.Singletons.Mobs)
 local jecs = require(ReplicatedStorage.Packages.jecs)
 local World = require(ServerStorage.Singletons.World)
 local Components = ServerStorage.Components
+local Hooks = require(Utils.HookCallback)
 
 local PlayerComponent = require(Components.Player)
 local ModelComponent = require(Components.Model)
@@ -157,15 +159,15 @@ local function ChangeOrAdd(ID, _, Player)
 	end
 end
 
-World:set(
-	PlayerComponent,
+Hooks.GetCallback(
 	jecs.OnChange,
+	PlayerComponent,
 	ChangeOrAdd
 )
 
-World:set(
-	PlayerComponent,
+Hooks.GetCallback(
 	jecs.OnAdd,
+	PlayerComponent,
 	ChangeOrAdd
 )
 
