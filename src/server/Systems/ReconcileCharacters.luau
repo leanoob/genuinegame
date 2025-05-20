@@ -36,6 +36,62 @@ local function MakeCharacterFromPlayer(Player: Player): Model?
 	return CharacterModel
 end
 
+local function WatchHumanoid(Player: Player, Humanoid: Humanoid)
+	local Model = Humanoid.Parent
+
+	local StateChanged = false
+
+	local Event1: RBXScriptConnection, Event2: RBXScriptConnection
+	Event1 = Humanoid.HealthChanged:Connect(function()
+		StateChanged = true
+	end)
+	Event2 = Model.AncestryChanged:Connect(function()
+		StateChanged = true
+	end)
+	
+	while task.wait() do
+		if not StateChanged then continue end
+		if Humanoid.Health > 0 and Model:IsDescendantOf(workspace) then continue end
+		Event1:Disconnect()
+		Event2:Disconnect()
+		StateChanged = false
+
+		if Model.Parent then
+			Model:Destroy()
+		end
+
+		local CharacterModel = MakeCharacterFromPlayer(Player)
+		if not CharacterModel then
+			return
+		end
+
+		GivePlayerModelOwnership(Player, CharacterModel)
+		SetCharacterRemote:FireClient(Player, CharacterModel)
+
+		Humanoid = CharacterModel:FindFirstChildOfClass("Humanoid")
+
+		Model = CharacterModel
+
+		Event1 = Humanoid.HealthChanged:Connect(function()
+			StateChanged = true
+		end)
+		Event2 = Model.AncestryChanged:Connect(function()
+			StateChanged = true
+		end)
+	end
+end
+
+local function SetupCharacterRespawn(Player: Player, Model: Model)
+	local Humanoid = Model:FindFirstChildOfClass("Humanoid")
+	assert(Humanoid)
+
+	local Thread = task.spawn(WatchHumanoid, Player, Humanoid)
+
+	Player.AncestryChanged:Once(function()
+		coroutine.close(Thread)
+	end)
+end
+
 local function ChangeOrAdd(ID, _, Player)
 	Player:WaitForChild("Backpack")
 	local CharacterEntity = World:target(ID, PlayerCharacterRelation)
@@ -59,6 +115,7 @@ local function ChangeOrAdd(ID, _, Player)
 
 		GivePlayerModelOwnership(Player, CharacterModel)
 		SetCharacterRemote:FireClient(Player, CharacterModel)
+		SetupCharacterRespawn(Player, CharacterModel)
 
 		return
 	else
@@ -78,6 +135,7 @@ local function ChangeOrAdd(ID, _, Player)
 
 		GivePlayerModelOwnership(Player, CharacterModel)
 		SetCharacterRemote:FireClient(Player, CharacterModel)
+		SetupCharacterRespawn(Player, CharacterModel)
 		
 		return
 	end

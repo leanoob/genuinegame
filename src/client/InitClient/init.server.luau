@@ -8,6 +8,8 @@ local LocalPlayer = PlayerService.LocalPlayer
 SetCharacterEvent.OnClientEvent:Connect(function(Model: Model)
 	LocalPlayer.Character = Model
 
+	workspace.CurrentCamera.CameraSubject = Model:FindFirstChildOfClass("Humanoid")
+
 	local Animate = Model:WaitForChild("Animate") :: LocalScript
 	Animate.Enabled = false
 	Animate.Enabled = true
