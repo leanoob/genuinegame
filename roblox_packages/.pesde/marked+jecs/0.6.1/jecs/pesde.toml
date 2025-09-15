@@ -1,5 +1,5 @@
 name = "marked/jecs"
-version = "0.6.0"
+version = "0.6.1"
 description = "A minimal copy of jecs published on the official pesde registry"
 license = "MIT"
 authors = ["jecs authors"]

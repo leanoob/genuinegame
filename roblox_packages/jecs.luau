@@ -1,4 +1,4 @@
-local module = require(script.Parent[".pesde"]["marked+jecs"]["0.6.0"]["jecs"]["jecs"])
+local module = require(script.Parent:FindFirstChild(".pesde"):FindFirstChild("marked+jecs"):FindFirstChild("0.6.1"):FindFirstChild("jecs"):FindFirstChild("jecs"))
 export type Archetype  = module.Archetype 
 export type QueryInner  = module.QueryInner 
 export type Record  = module.Record 

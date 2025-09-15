@@ -1,4 +1,4 @@
-local module = require(script.Parent[".pesde"]["alicesaidhi+vide"]["0.3.1-lite.672"]["vide"]["src"])
+local module = require(script.Parent:FindFirstChild(".pesde"):FindFirstChild("alicesaidhi+vide"):FindFirstChild("0.3.1-lite.672"):FindFirstChild("vide"):FindFirstChild("src"))
 export type source<T> = module.source<T>
 export type Source<T> = module.Source<T>
 export type context<T> = module.context<T>
