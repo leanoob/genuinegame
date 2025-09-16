@@ -25,10 +25,9 @@ jobs:
         run: ./build
       
       - name: Publish to Roblox
-        uses: filiptibell/roblox-place-publish-action@v2.1
+        uses: Ulferno/upload-to-roblox@v1.0.4
         with:
-          universe-id: '7708271874'
-          place-id: '100717556333221'
+          universeId: 7708271874
+          placeId: 100717556333221
           api-key: ${{ secrets.CLOUD_API_KEY }}
-          path: 'output.rbxl'
-          max-retries: '1'
+          file: 'output.rbxl'
