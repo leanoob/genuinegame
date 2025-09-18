@@ -1,0 +1,15 @@
+option ServerOutput = "../server/blink.luau"
+option ClientOutput = "../client/blink.luau"
+
+event Foul {
+	From: Server,
+	Type: Reliable,
+	Call: SingleAsync,
+	Data: f64
+}
+event Mane {
+	From: Server,
+	Type: Reliable,
+	Call: SingleAsync,
+	Data: f64
+}
