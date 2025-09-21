@@ -1,0 +1,13 @@
+name = "marked/jecs"
+version = "0.9.0"
+description = "A minimal copy of jecs published on the official pesde registry"
+license = "MIT"
+authors = ["jecs authors"]
+repository = "https://git.devmarked.win/marked/jecs-pesde"
+private = false
+includes = ["jecs.luau", "pesde.toml", "README.md", "CHANGELOG.md", "LICENSE", ".luaurc"]
+
+[target]
+environment = "roblox"
+lib = "jecs.luau"
+build_files = ["jecs.luau"]

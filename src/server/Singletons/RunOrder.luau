@@ -9,10 +9,11 @@ return {
     },
     Phases = {
         Init = {
-            require(Systems.ReconcilePlayers)
+            require(Systems.SpawnPrefabs)
         },
         Reconcile = {
-
+            require(Systems.ReconcilePlayers),
+            require(Systems.HeartProcessFluids)
         }
     }
 }

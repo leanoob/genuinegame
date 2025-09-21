@@ -5,19 +5,19 @@ name = "leanoob/genuinegame"
 version = "0.1.0"
 target = "roblox"
 
-[graph."alicesaidhi/vide@0.3.1-lite.672 roblox"]
-direct = ["vide", { repo = "https://github.com/alicesaidhi/vide", rev = "main" }, "standard"]
+[graph."centau/vide@0.4.0 roblox"]
+direct = ["vide", { repo = "https://github.com/centau/vide", rev = "main" }, "standard"]
 
-[graph."alicesaidhi/vide@0.3.1-lite.672 roblox".pkg_ref]
+[graph."centau/vide@0.4.0 roblox".pkg_ref]
 ref_ty = "git"
-repo = "https://github.com/alicesaidhi/vide"
-tree_id = "6f20d780a3c8d7e91458b86e1e9b5456886d49d3"
+repo = "https://github.com/centau/vide"
+tree_id = "ea206a05f5cef9a870aed580cd7d91c95825a021"
 new_structure = true
 
-[graph."marked/jecs@0.6.1 roblox"]
-direct = ["jecs", { name = "marked/jecs", version = "^0.6.0", index = "default" }, "standard"]
+[graph."marked/jecs@0.9.0 roblox"]
+direct = ["jecs", { name = "marked/jecs", version = "^0.9.0", index = "default" }, "standard"]
 
-[graph."marked/jecs@0.6.1 roblox".pkg_ref]
+[graph."marked/jecs@0.9.0 roblox".pkg_ref]
 ref_ty = "pesde"
 index_url = "https://github.com/pesde-pkg/index"
 

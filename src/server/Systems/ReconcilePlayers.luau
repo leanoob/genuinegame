@@ -1,14 +1,41 @@
 local ServerStorage = game:GetService("ServerStorage")
 local PlayerService = game:GetService("Players")
+local Singletons = ServerStorage.Singletons
 
-local Prefabs = ServerStorage.Prefabs
+local World = require(Singletons.World)
+local Players = require(Singletons.Players)
+local Components = ServerStorage.Components
 
-local PlayerPrefab = require(Prefabs.Player)
+local PlayerComponent = require(Components.Player)
+
+local JoinedPlayers = {}
+local LeftPlayers = {}
 
 PlayerService.PlayerAdded:Connect(function(Player)
-	PlayerPrefab(Player)
-
-	Player:LoadCharacter()
+	JoinedPlayers[#JoinedPlayers+1] = Player
+end)
+PlayerService.PlayerRemoving:Connect(function(Player)
+	LeftPlayers[#LeftPlayers+1] = Player
 end)
 
-return nil
+return function()
+	for i = 1,#LeftPlayers do
+		local Entity = Players[LeftPlayers[i]]
+		World:delete(Entity)
+		Players[LeftPlayers[i]] = nil
+	end
+	
+	for i = 1,#JoinedPlayers do
+		local Player = JoinedPlayers[i]
+		if not Player.Parent then continue end
+
+		local NewPlayerEntity = World:entity()
+		World:set(NewPlayerEntity, PlayerComponent, Player)
+		Players[Player] = NewPlayerEntity
+
+		Player:LoadCharacter()
+	end
+
+	table.clear(LeftPlayers)
+	table.clear(JoinedPlayers)
+end
