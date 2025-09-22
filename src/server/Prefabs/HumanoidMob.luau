@@ -1,9 +1,12 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Singletons = ServerStorage.Singletons
 local Assets = ServerStorage.Assets
 local Components = ServerStorage.Components
+local Commands = ServerStorage.Util.Commands
 
+local jecs = require(ReplicatedStorage.Packages.jecs)
 local World = require(Singletons.World)
 
 local Mobs = require(Singletons.Mobs)
@@ -13,11 +16,21 @@ local HeartComponent = require(Components.Heart)
 local FluidContainerComponent = require(Components.FluidContainer)
 local ModelComponent = require(Components.Model)
 
+local DeferDespawn = require(Commands.DespawnEntity)
+
 local StarterCharacter = Assets.StarterCharacter :: Model
 
-return function()
+type PrefabOptions = {
+	CFrame: CFrame?
+}
+
+return function(Options: PrefabOptions)
 	local NewMobModel = StarterCharacter:Clone()
 	NewMobModel.Parent = workspace
+
+	if Options.CFrame then
+		NewMobModel:PivotTo(Options.CFrame)
+	end
 
 	local MobEntity = World:entity()
 	World:set(
@@ -60,6 +73,17 @@ return function()
 	)
 
 	Mobs[NewMobModel] = MobEntity
+	NewMobModel.AncestryChanged:Once(function()
+		if World:contains(MobEntity) then
+			DeferDespawn(MobEntity)
+		end
+
+		Mobs[NewMobModel] = nil
+
+		if NewMobModel.Parent then
+			NewMobModel:Destroy()
+		end
+	end)
 
 	return MobEntity
 end

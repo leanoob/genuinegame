@@ -9,6 +9,8 @@ return {
     },
     Phases = {
         Init = {
+            require(Systems.ModelDeletions),
+            require(Systems.FlushDespawns),
             require(Systems.SpawnPrefabs)
         },
         Reconcile = {
