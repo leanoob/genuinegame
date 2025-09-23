@@ -12,6 +12,11 @@ This project includes third-party libraries, each licensed under their respectiv
   See: `LICENSES/Ukendio.jecs.txt`  
   Source: https://github.com/Ukendio/jecs
 
+- **jabby** by alicesaidhi
+  Licensed under the MIT License  
+  See: `LICENSES/alicesaidhi.jabby.txt`  
+  Source: https://github.com/alicesaidhi/jabby
+
 - **vide** by centau  
   Licensed under the MIT License  
   See: `LICENSES/centau.vide.txt`  

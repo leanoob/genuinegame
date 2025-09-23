@@ -9,12 +9,15 @@ local Commands = ServerStorage.Util.Commands
 local jecs = require(ReplicatedStorage.Packages.jecs)
 local World = require(Singletons.World)
 
+local pair = jecs.pair
+
 local Mobs = require(Singletons.Mobs)
 
 local HealthComponent = require(Components.Health)
 local HeartComponent = require(Components.Heart)
 local FluidContainerComponent = require(Components.FluidContainer)
 local ModelComponent = require(Components.Model)
+local BodyPartComponent = require(Components.BodyPart)
 
 local DeferDespawn = require(Commands.DespawnEntity)
 
@@ -23,6 +26,33 @@ local StarterCharacter = Assets.StarterCharacter :: Model
 type PrefabOptions = {
 	CFrame: CFrame?
 }
+
+local BodyPartNames = {
+	Head = true, Torso = true,
+	["Left Arm"] = true, ["Right Arm"] = true,
+	["Left Leg"] = true, ["Right Leg"] = true
+}
+
+local function MakeBodyParts(MobEntity, Model)
+	for Name, _ in next, BodyPartNames do
+		local Part = Model:FindFirstChild(Name)
+		if not Part then continue end
+
+		local Entity = World:entity()
+
+		World:set(
+			Entity,
+			BodyPartComponent,
+			{Damage = 0}
+		)
+		World:set(
+			Entity,
+			ModelComponent,
+			Part
+		)
+		World:add(Entity, pair(jecs.ChildOf, MobEntity))
+	end
+end
 
 return function(Options: PrefabOptions)
 	local NewMobModel = StarterCharacter:Clone()
@@ -71,6 +101,9 @@ return function(Options: PrefabOptions)
 			Capacity = 1000
 		}
 	)
+
+	-- Adds Entities per body part and makes them children of MobEntity
+	MakeBodyParts(MobEntity, NewMobModel)
 
 	Mobs[NewMobModel] = MobEntity
 	NewMobModel.AncestryChanged:Once(function()
