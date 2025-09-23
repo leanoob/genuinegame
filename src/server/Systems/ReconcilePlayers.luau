@@ -29,6 +29,7 @@ return function()
 		local Player = JoinedPlayers[i]
 		if not Player.Parent then continue end
 
+		print("Creating new player for", Player)
 		local NewPlayerEntity = World:entity()
 		World:set(NewPlayerEntity, PlayerComponent, Player)
 		Players[Player] = NewPlayerEntity
@@ -36,6 +37,10 @@ return function()
 		Player:LoadCharacter()
 	end
 
-	table.clear(LeftPlayers)
-	table.clear(JoinedPlayers)
+	if #LeftPlayers>0 then
+		LeftPlayers = {}
+	end
+	if #JoinedPlayers>0 then
+		JoinedPlayers = {}
+	end
 end

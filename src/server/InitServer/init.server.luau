@@ -61,9 +61,9 @@ for i = 1,#PhaseOrder do -- Register
     end
 end
 
-game:GetService("RunService").Heartbeat:Connect(function(DeltaTime)
+while RunService.PostSimulation:Wait() do
     for i = 1,#OrderedSystems do
         local System = OrderedSystems[i]
-        scheduler:run(System[1], System[2], DeltaTime)
+        scheduler:run(System[1], System[2], 0)
     end
-end)
+end
