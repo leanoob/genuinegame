@@ -6,4 +6,6 @@ local World = require(game:GetService("ServerStorage").Singletons.World)
 -- 	Blood: number,
 -- 	DepletionMultiplier: number
 -- }>
-return World:component()
+local Component = World:component()
+World:set(Component, jecs.Name, script.Name)
+return Component
