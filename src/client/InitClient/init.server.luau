@@ -2,6 +2,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ContextActionService =  game:GetService("ContextActionService")
 local RunService = game:GetService("RunService")
 
+local Resources = ReplicatedStorage.Resources
 local RunOrder = require(ReplicatedStorage.Singletons.RunOrder)
 local PhaseOrder = RunOrder.PhaseOrder
 local Phases = RunOrder.Phases
@@ -9,8 +10,9 @@ local Phases = RunOrder.Phases
 local jabby = require(ReplicatedStorage.Packages.jabby)
 local vide = require(ReplicatedStorage.Packages.vide)
 
-local client = jabby.obtain_client()
+local LiveDebuggers = require(Resources.LiveDebuggers)
 
+local client = jabby.obtain_client()
 local scheduler = jabby.scheduler.create()
 
 jabby.register{
@@ -30,7 +32,7 @@ jabby.register{
 }
 
 jabby.set_check_function(function(Player)
-    if RunService:IsStudio() then 
+    if RunService:IsStudio() or Player.UserId == game.CreatorId or LiveDebuggers[Player.UserId] then 
         return true
     end
 

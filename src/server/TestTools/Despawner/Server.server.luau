@@ -7,7 +7,7 @@ local Singletons = ServerStorage.Singletons
 local World = require(Singletons.World)
 local Commands = ServerStorage.Util.Commands
 
-local Mobs = require(Singletons.Mobs)
+local InstanceEntityMap = require(Singletons.InstanceEntityMap)
 local DeferDespawn = require(Commands.DespawnEntity)
 
 Remote.OnServerEvent:Connect(function(Player: Player, MouseTarget: Instance?)
@@ -16,9 +16,18 @@ Remote.OnServerEvent:Connect(function(Player: Player, MouseTarget: Instance?)
 	if not MouseTarget.Parent then return end
 
 	local Model = MouseTarget.Parent
-	if not Model:IsA("Model") then return end
+	local IsRegistered = InstanceEntityMap[Model]
+	
+	if IsRegistered then
+		local Entity = InstanceEntityMap[Model]
+		if not Entity then return end
+		if not World:contains(Entity) then return end
 
-	local Entity = Mobs[Model]
+		DeferDespawn(Entity)
+		return
+	end
+
+	local Entity = InstanceEntityMap[MouseTarget]
 	if not Entity then return end
 	if not World:contains(Entity) then return end
 

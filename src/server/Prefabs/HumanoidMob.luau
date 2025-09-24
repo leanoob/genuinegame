@@ -4,22 +4,18 @@ local ServerStorage = game:GetService("ServerStorage")
 local Singletons = ServerStorage.Singletons
 local Assets = ServerStorage.Assets
 local Components = ServerStorage.Components
-local Commands = ServerStorage.Util.Commands
 
 local jecs = require(ReplicatedStorage.Packages.jecs)
 local World = require(Singletons.World)
 
 local pair = jecs.pair
 
-local Mobs = require(Singletons.Mobs)
-
 local HealthComponent = require(Components.Health)
 local HeartComponent = require(Components.Heart)
 local FluidContainerComponent = require(Components.FluidContainer)
 local ModelComponent = require(Components.Model)
 local BodyPartComponent = require(Components.BodyPart)
-
-local DeferDespawn = require(Commands.DespawnEntity)
+local MobComponent = require(Components.Mob)
 
 local StarterCharacter = Assets.StarterCharacter :: Model
 
@@ -63,14 +59,16 @@ return function(Options: PrefabOptions)
 	end
 
 	local MobEntity = World:entity()
-	World:set(
-		MobEntity,
+
+	local ComponentArr = {
 		ModelComponent,
-		NewMobModel
-	)
-	World:set(
-		MobEntity,
 		HealthComponent,
+		HeartComponent,
+		FluidContainerComponent,
+		MobComponent
+	}
+	local ValueArr = {
+		NewMobModel,
 		{
 			Damage = {
 				Limit = 100,
@@ -82,41 +80,23 @@ return function(Options: PrefabOptions)
 				Toxic = 0,
 				Oxygen = 0
 			}
-		}
-	)
-	World:set(
-		MobEntity,
-		HeartComponent,
+		},
 		{
 			BloodCapacity = 500,
 			Blood = 500,
 			DeletionMultiplier = 1
-		}
-	)
-	World:set(
-		MobEntity,
-		FluidContainerComponent,
+		},
 		{
 			Fluids = {},
 			Capacity = 1000
-		}
-	)
+		},
+		true
+	}
 
 	-- Adds Entities per body part and makes them children of MobEntity
 	MakeBodyParts(MobEntity, NewMobModel)
 
-	Mobs[NewMobModel] = MobEntity
-	NewMobModel.AncestryChanged:Once(function()
-		if World:contains(MobEntity) then
-			DeferDespawn(MobEntity)
-		end
-
-		Mobs[NewMobModel] = nil
-
-		if NewMobModel.Parent then
-			NewMobModel:Destroy()
-		end
-	end)
+	jecs.bulk_insert(World, MobEntity, ComponentArr, ValueArr)
 
 	return MobEntity
 end
