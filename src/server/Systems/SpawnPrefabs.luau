@@ -7,7 +7,6 @@ return function()
 	for i = 1,#PrefabQueue do
 		local Command = PrefabQueue[i]
 		Command.Prefab(Command.Args)
+		PrefabQueue[i] = nil
 	end
-
-	table.clear(PrefabQueue)
 end

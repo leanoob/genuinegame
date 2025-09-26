@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Singletons = ServerStorage.Singletons
 local Components = ServerStorage.Components
+local Tags = ServerStorage.Tags
 local Commands = ServerStorage.Util.Commands
 local jecs = require(ReplicatedStorage.Packages.jecs)
 
@@ -10,6 +11,7 @@ local World = require(Singletons.World)
 local InstanceEntityMap = require(Singletons.InstanceEntityMap)
 
 local ModelComponent = require(Components.Model)
+local ModelOptionalTag = require(Tags.ModelOptional)
 
 local DeferDespawn = require(Commands.DespawnEntity)
 
@@ -42,6 +44,13 @@ World:set(
 				end
 			end
 			if Parent == nil then
+				if World:has(ModelOptionalTag) then
+					if AncestryChange.Connected then
+						AncestryChange:Disconnect()
+					end
+
+					return
+				end
 				DeferDespawn(Entity)
 				if AncestryChange.Connected then
 					AncestryChange:Disconnect()

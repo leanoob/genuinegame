@@ -7,6 +7,7 @@ local RunOrder = require(ServerStorage.Singletons.RunOrder)
 local PhaseOrder = RunOrder.PhaseOrder
 local Phases = RunOrder.Phases
 
+local InstanceEntityMap = require(ServerStorage.Singletons.InstanceEntityMap)
 local LiveDebuggers = require(Resources.LiveDebuggers)
 
 local jabby = require(ReplicatedStorage.Packages.jabby)
@@ -16,7 +17,13 @@ jabby.register{
     applet = jabby.applets.world,
     name = "world",
     configuration = {
-        world = require(ServerStorage.Singletons.World)
+        world = require(ServerStorage.Singletons.World),
+        get_entity_from_part = function(Part)
+            local Entity = InstanceEntityMap[Part]
+            if not Entity then return end
+
+            return Entity, Part
+        end
     }
 }
 
@@ -35,6 +42,7 @@ jabby.set_check_function(function(Player)
 
     return false
 end)
+jabby.broadcast_server()
 
 for i = 1,#PhaseOrder do -- Remove no-ops
     local Systems = Phases[PhaseOrder[i]]

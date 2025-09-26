@@ -8,7 +8,7 @@ local World = require(Singletons.World)
 
 local FluidEffects = Resources.FluidEffects
 
-local HeartComponent = require(Components.Heart)
+local BloodSystemComponent = require(Components.BloodSystem)
 local FluidContainerComponent = require(Components.FluidContainer)
 local HealthComponent = require(Components.Health)
 
@@ -45,7 +45,9 @@ return function()
 
 	SystemLastRan = SystemLastRan + SecondsBetweenRuns
 	
-	for Entity, FluidContainer, Health, _ in World:query(FluidContainerComponent, HealthComponent, HeartComponent) do
+	for Entity, FluidContainer, Health, BloodSystem in World:query(FluidContainerComponent, HealthComponent, BloodSystemComponent) do
+		if BloodSystem.Disabled then continue end
+
 		local Fluids = FluidContainer.Fluids
 
 		local Damage = Health.Damage

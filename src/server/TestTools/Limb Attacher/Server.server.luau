@@ -5,6 +5,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Singletons = ServerStorage.Singletons
 local Components = ServerStorage.Components
+local Tags = ServerStorage.Tags
 
 local jecs = require(ReplicatedStorage.Packages.jecs)
 local pair = jecs.pair
@@ -14,7 +15,7 @@ local InstanceEntityMap = require(Singletons.InstanceEntityMap)
 local World = require(Singletons.World)
 local ModelComponent = require(Components.Model)
 local BodyPartComponent = require(Components.BodyPart)
-local MobComponent = require(Components.Mob)
+local MobTag = require(Tags.Mob)
 
 local LimbTarget: {Instance: BasePart, Entity: jecs.Entity & number}? = nil
 
@@ -83,14 +84,14 @@ Remote.OnServerEvent:Connect(function(Player: Player, MouseTarget: Instance?)
 
 		if Model ~= TargetParent then return end
 
-		if not World:get(ModelEntity, MobComponent) then return end
+		if not World:get(ModelEntity, MobTag) then return end
 
 		Joint.Part0 = Torso
 		Joint.Parent = Torso
 		LimbTarget.Instance.CanCollide = false
 		LimbTarget.Instance.Parent = TargetParent
 
-		print("Rejoined", LimbTarget.Instance, "and", TargetParent)
+		print("Joined", LimbTarget.Instance, "and", TargetParent)
 		World:add(LimbTarget.Entity, pair(jecs.ChildOf, ModelEntity))
 
 		ResetTarget()
