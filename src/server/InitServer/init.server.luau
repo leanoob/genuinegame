@@ -10,6 +10,8 @@ local Phases = RunOrder.Phases
 local InstanceEntityMap = require(ServerStorage.Singletons.InstanceEntityMap)
 local LiveDebuggers = require(Resources.LiveDebuggers)
 
+require(ServerStorage.Singletons.World)
+
 local jabby = require(ReplicatedStorage.Packages.jabby)
 local scheduler = jabby.scheduler.create()
 

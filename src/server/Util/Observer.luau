@@ -6,11 +6,14 @@ type Query<T...> = jecs.Query<T...>
 
 type Id<T=any> = jecs.Id<T>
 
-type Entity<T> = jecs.Entity<T>
 
 export type Iter<T...> = (Observer<T...>) -> () -> (jecs.Entity, T...)
 
 export type Observer<T...> = {
+	disconnect: (Observer<T...>) -> (),
+}
+
+export type Monitor<T...> = {
 	disconnect: (Observer<T...>) -> (),
 	added: ((jecs.Entity) -> ()) -> (),
 	removed: ((jecs.Entity) -> ()) -> ()
@@ -18,7 +21,7 @@ export type Observer<T...> = {
 
 local function observers_new<T...>(
 	query: Query<T...>,
-	callback: ((Entity<nil>) -> ())
+	callback: (jecs.Entity) -> ()
 ): Observer<T...>
 	query:cached()
 
@@ -47,10 +50,10 @@ local function observers_new<T...>(
 		archetypes[archetype.id] = true
 	end
 
-	local function emplaced<T, a>(
-		entity: jecs.Entity<T>,
+	local function emplaced<a>(
+		entity: jecs.Entity,
 		id: jecs.Id<a>,
-		value: a?
+		value: a
 	)
 		local r = entity_index.sparse_array[jecs.ECS_ID(entity)]
 
@@ -65,23 +68,37 @@ local function observers_new<T...>(
 
 	for _, term in terms do
 		if jecs.IS_PAIR(term) then
-			term = jecs.ECS_PAIR_FIRST(term)
+			local rel = jecs.ECS_PAIR_FIRST(term)
+			local tgt = jecs.ECS_PAIR_SECOND(term)
+			local wc = tgt == jecs.w
+
+			local onadded = world:added(rel, function(entity, id)
+				if not wc and id ~= term then
+					return
+				end
+				local r = jecs.record(world, entity)
+				if archetypes[r.archetype.id] then
+					callback(entity)
+				end
+			end)
+			table.insert(cleanup, onadded)
+		else
+			local onadded = world:added(term, emplaced)
+			local onchanged = world:changed(term, emplaced)
+			table.insert(cleanup, onadded)
+			table.insert(cleanup, onchanged)
 		end
-		local onadded = world:added(term, emplaced)
-		local onchanged = world:changed(term, emplaced)
-		table.insert(cleanup, onadded)
-		table.insert(cleanup, onchanged)
  	end
 
 	local without = query.filter_without
    	if without then
 		for _, term in without do
 			if jecs.IS_PAIR(term) then
-				local rel = jecs.ECS_PAIR_SECOND(term)
+				local rel = jecs.ECS_PAIR_FIRST(term)
 				local tgt = jecs.ECS_PAIR_SECOND(term)
 				local wc = tgt == jecs.w
 				local onremoved = world:removed(rel, function(entity, id)
-					if not wc and term ~= tgt then
+					if not wc and id ~= term then
 						return
 					end
 					local r = jecs.record(world, entity)
@@ -134,10 +151,10 @@ local function observers_new<T...>(
   		disconnect = disconnect,
    	}
 
-    return (observer :: any) :: Observer<T...>
+    return observer
 end
 
-local function monitors_new<T...>(query: Query<T...>): Observer<T...>
+local function monitors_new<T...>(query: Query<T...>): Monitor<T...>
 	query:cached()
 
 	local world = (query :: Query<T...> & { world: World }).world
@@ -165,10 +182,10 @@ local function monitors_new<T...>(query: Query<T...>): Observer<T...>
 	local callback_added: ((jecs.Entity) -> ())?
 	local callback_removed: ((jecs.Entity) -> ())?
 
-	local function emplaced<T, a>(
-		entity: jecs.Entity<T>,
+	local function emplaced<a>(
+		entity: jecs.Entity,
 		id: jecs.Id<a>,
-		value: a?
+		value: a
 	)
 		if callback_added == nil then
 			return
@@ -199,12 +216,49 @@ local function monitors_new<T...>(query: Query<T...>): Observer<T...>
 
 	for _, term in terms do
 		if jecs.IS_PAIR(term) then
-			term = jecs.ECS_PAIR_FIRST(term)
+			local rel = jecs.ECS_PAIR_FIRST(term)
+			local tgt = jecs.ECS_PAIR_SECOND(term)
+			local wc = tgt == jecs.w
+
+			local onadded = world:added(rel, function(entity, id)
+				if callback_added == nil then
+					return
+				end
+
+				if not wc and id ~= term then
+					return
+				end
+
+				local r = jecs.entity_index_try_get_fast(
+					entity_index, entity :: any) :: jecs.Record
+
+				local archetype = r.archetype
+
+				if archetypes[archetype.id] then
+					callback_added(entity)
+				end
+			end)
+			local onremoved = world:removed(rel, function(entity, id)
+				if callback_removed == nil then
+					return
+				end
+				if not wc and id ~= term then
+					return
+				end
+				local r = jecs.record(world, entity)
+				if not archetypes[r.archetype.id] then
+					return
+				end
+				callback_removed(entity)
+			end)
+			table.insert(cleanup, onadded)
+			table.insert(cleanup, onremoved)
+		else
+			local onadded = world:added(term, emplaced)
+			local onremoved = world:removed(term, removed)
+			table.insert(cleanup, onadded)
+			table.insert(cleanup, onremoved)
 		end
-		local onadded = world:added(term, emplaced)
-		local onremoved = world:removed(term, removed)
-		table.insert(cleanup, onadded)
-		table.insert(cleanup, onremoved)
  	end
 
   	local without = query.filter_without
@@ -307,13 +361,13 @@ local function monitors_new<T...>(query: Query<T...>): Observer<T...>
     	callback_removed = callback
     end
 
-	local observer = {
+	local monitor = {
   		disconnect = disconnect,
     	added = monitor_added,
      	removed = monitor_removed
-   	}
+   	} :: Monitor<T...>
 
-    return (observer :: any) :: Observer<T...>
+    return monitor
 end
 
 return {

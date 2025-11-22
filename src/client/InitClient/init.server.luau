@@ -74,9 +74,12 @@ for i = 1,#PhaseOrder do -- Register
     end
 end
 
+local PreviousFrame = os.clock()
 while RunService.PostSimulation:Wait() do
+    local DeltaTime = os.clock() - PreviousFrame
+    PreviousFrame = os.clock()
     for i = 1,#OrderedSystems do
         local System = OrderedSystems[i]
-        scheduler:run(System[1], System[2], 0)
+        scheduler:run(System[1], System[2], DeltaTime)
     end
 end

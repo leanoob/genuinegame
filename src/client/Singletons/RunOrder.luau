@@ -1,7 +1,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Systems = ReplicatedStorage.Systems
 
--- Ideally this table is only initialized with "official" systems. If you want to add a system, just insert it at runtime.
 return {
     PhaseOrder = {
         "Init",
@@ -10,9 +9,10 @@ return {
     Phases = {
         Init = {
             -- require(Systems.ReconcilePlayers)
+            require(Systems.Camera)
         },
         Reconcile = {
-
+            
         }
     }
 }

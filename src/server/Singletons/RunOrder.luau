@@ -1,7 +1,6 @@
 local ServerStorage = game:GetService("ServerStorage")
 local Systems = ServerStorage.Systems
 
--- Ideally this table is only initialized with "official" systems. If you want to add a system, just insert it at runtime.
 return {
     PhaseOrder = {
         "Init",
@@ -11,12 +10,11 @@ return {
         Init = {
             require(Systems.ModelDeletions),
             require(Systems.FlushDespawns),
-            require(Systems.SpawnPrefabs)
+            require(Systems.HierarchySync),
+            require(Systems.SpawnPrefabs),
+            -- require(Systems.SpawnPeople)
         },
         Reconcile = {
-            require(Systems.ReconcilePlayers),
-            require(Systems.HeartChange),
-            require(Systems.HeartProcessFluids)
         }
     }
 }
