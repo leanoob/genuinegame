@@ -15,11 +15,11 @@ jobs:
       - name: Setup Pesde
         uses: lumin-org/setup-pesde@v0.4.1
 
+      - name: Rojo Setup
+        uses: notthebestdev/setup-rojo@v1
+
       - name: Rojo Build
-        uses: CompeyDev/rojo-build-action@0.1.5
-        with:
-          output: rojo-output
-          type: rbxl
+        run: rojo build -o ./rojo-output.rbxl
 
       - name: Build
         run: ./build
