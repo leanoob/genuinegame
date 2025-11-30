@@ -9,7 +9,8 @@ return {
     Phases = {
         Init = {
             -- require(Systems.ReconcilePlayers)
-            require(Systems.Camera)
+            require(Systems.FreeCamera),
+            require(Systems.Respawn)
         },
         Reconcile = {
             

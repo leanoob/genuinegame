@@ -5,6 +5,5 @@ return {
 	Rotation = Quaternion.new(0,0,0,1),
 	Yaw = 0,
 	Pitch = 0,
-	Mode = "Standing", -- Standing | Floating
-	PreviousMode = "Standing"
+	Controller = "FreeCamera"
 }

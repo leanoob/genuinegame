@@ -26,6 +26,7 @@ end
 
 UserInputService.InputChanged:Connect(function(Input, GPE)
 	if GPE then return end
+	if Camera.Controller ~= "FreeCamera" then return end
 
 	if Input.UserInputType ~= Enum.UserInputType.MouseMovement then return end
 
@@ -56,8 +57,11 @@ UserInputService.InputChanged:Connect(function(Input, GPE)
 end)
 
 return function(DeltaTime: number)
+	if Camera.Controller ~= "FreeCamera" then return end
 	UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 	UserInputService.MouseIconEnabled = false
+
+	Camera.Position = workspace.CurrentCamera.CFrame.Position
 
 	local ForwardDelta = 0
 	local RightDelta = 0

@@ -1,15 +1,20 @@
 option ServerOutput = "../server/blink.luau"
 option ClientOutput = "../client/blink.luau"
 
-event Foul {
-	From: Server,
-	Type: Reliable,
-	Call: SingleAsync,
-	Data: f64
+struct PlayerCharacterData {
+	Model: Instance?,
+	RespawnAllowed: boolean
 }
-event Mane {
+
+event PlayerCharacterChange {
 	From: Server,
 	Type: Reliable,
-	Call: SingleAsync,
-	Data: f64
+	Call: ManySync,
+	Data: PlayerCharacterData
+}
+
+event RequestRespawn {
+	From: Client,
+	Type: Reliable,
+	Call: SingleSync
 }

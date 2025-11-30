@@ -12,7 +12,8 @@ return {
             require(Systems.FlushDespawns),
             require(Systems.HierarchySync),
             require(Systems.SpawnPrefabs),
-            -- require(Systems.SpawnPeople)
+            require(Systems.Players),
+            require(Systems.SpawnPeople)
         },
         Reconcile = {
         }
