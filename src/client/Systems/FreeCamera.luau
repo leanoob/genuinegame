@@ -61,8 +61,6 @@ return function(DeltaTime: number)
 	UserInputService.MouseBehavior = Enum.MouseBehavior.LockCenter
 	UserInputService.MouseIconEnabled = false
 
-	Camera.Position = workspace.CurrentCamera.CFrame.Position
-
 	local ForwardDelta = 0
 	local RightDelta = 0
 	local VerticalDelta = 0

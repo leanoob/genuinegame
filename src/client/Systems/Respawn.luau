@@ -47,11 +47,14 @@ end)
 
 blink.PlayerCharacterChange.On(function(CharacterData)
 	RespawnAllowed(CharacterData.RespawnAllowed)
+	local RoCamera = workspace.CurrentCamera
+
 	if CharacterData.RespawnAllowed then
-		workspace.CurrentCamera.CameraType = Enum.CameraType.Scriptable
+		RoCamera.CameraType = Enum.CameraType.Scriptable
+		Camera.Position = workspace.CurrentCamera.CFrame.Position
 		Camera.Controller = "FreeCamera"
 	else
-		workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+		RoCamera.CameraType = Enum.CameraType.Custom
 		Camera.Controller = "Roblox"
 		UserInputService.MouseBehavior = Enum.MouseBehavior.Default
 		UserInputService.MouseIconEnabled = true
